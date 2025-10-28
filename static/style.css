@@ -1,0 +1,62 @@
+body {
+  font-family: Arial;
+  padding: 2rem;
+  background: #f4f4f4;
+}
+
+h2 {
+  text-align: center;
+}
+
+.contenedor {
+  display: flex;
+  gap: 2rem;
+  margin-top: 2rem;
+}
+
+.panel {
+  flex: 1;
+}
+
+.scroll {
+  background: #fff;
+  border: 1px solid #ccc;
+  height: 300px;
+  overflow-y: scroll;
+  padding: 1rem;
+  white-space: pre-line;
+  font-family: monospace;
+  transition: background-color 0.3s ease;
+}
+
+.resaltado-rojo {
+  color: red;
+  font-weight: bold;
+}
+
+.resaltado-verde {
+  color: green;
+  font-weight: bold;
+}
+
+.botones {
+  text-align: center;
+  margin-top: 1rem;
+}
+
+button {
+  padding: 0.8rem 1.5rem;
+  margin: 0.5rem;
+  font-size: 1rem;
+}
+
+.resaltado-naranja {
+  color: orange;
+  font-weight: bold;
+}
+
+.resaltado-morado {
+  background-color: #e0ccff;
+  border-left: 4px solid purple;
+  padding-left: 8px;
+}

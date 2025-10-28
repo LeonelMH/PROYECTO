@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Analizador Léxico</title>
+  <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+  <h2>Registro Léxico</h2>
+
+  <div class="botones">
+    <a href="/"><button>← Volver a Inicio</button></a>
+    <button onclick="toggleCaptura()">Iniciar / Detener Captura</button>
+    <button onclick="limpiar()">Limpiar Registros</button>
+  </div>
+
+  <div class="contenedor">
+    <div class="panel" id="deteccion">
+      <h3>Detección de voz</h3>
+      <div class="scroll" id="voz"></div>
+    </div>
+    <div class="panel" id="registro">
+      <h3>Log de voz en tiempo real</h3>
+      <div class="scroll" id="log"></div>
+    </div>
+  </div>
+
+  <script>
+    let capturaActiva = false;
+    let scrollManual = { voz: false, log: false };
+
+    function toggleCaptura() {
+      capturaActiva = !capturaActiva;
+      fetch('/toggle', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ activo: capturaActiva })
+      });
+    }
+
+    function limpiar() {
+      fetch('/limpiar', { method: 'POST' });
+    }
+
+    function detectScroll(id) {
+      const el = document.getElementById(id);
+      el.addEventListener('scroll', () => {
+        const atBottom = el.scrollHeight - el.scrollTop <= el.clientHeight + 10;
+        scrollManual[id] = !atBottom;
+      });
+    }
+    detectScroll('voz');
+    detectScroll('log');
+
+    setInterval(() => {
+      fetch('/frases')
+        .then(res => res.json())
+        .then(data => {
+          const voz = document.getElementById('voz');
+          const log = document.getElementById('log');
+
+          voz.innerHTML = data.deteccion.map(linea => {
+            if (linea.includes("🔴 Fatiga verbal detectada.")) {
+              return `<div class="resaltado-rojo">${linea}</div>`;
+            } else if (linea.includes("🟢 Recuperación verbal detectada.")) {
+              return `<div class="resaltado-verde">${linea}</div>`;
+            } else {
+              return `<div>${linea}</div>`;
+            }
+          }).join('');
+
+          log.innerHTML = data.frases.map(frase => {
+            let resaltada = frase;
+            data.frases_fatiga.forEach(palabra => {
+              const regex = new RegExp(`(${palabra})`, 'gi');
+              resaltada = resaltada.replace(regex, `<span class="resaltado-rojo">$1</span>`);
+            });
+            data.frases_recuperacion.forEach(palabra => {
+              const regex = new RegExp(`(${palabra})`, 'gi');
+              resaltada = resaltada.replace(regex, `<span class="resaltado-verde">$1</span>`);
+            });
+            return `<div>${resaltada}</div>`;
+          }).join('');
+
+          if (!scrollManual.voz) voz.scrollTop = voz.scrollHeight;
+          if (!scrollManual.log) log.scrollTop = log.scrollHeight;
+        });
+    }, 1000);
+  </script>
+</body>
+</html>
