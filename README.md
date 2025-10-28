@@ -1,3 +1,7 @@
+# Lenguajes y Autómatas II — Proyecto de análisis multimodal
+
+## 🔧 Instalación
+
 # Instalación de Dependencias
 
 Para instalar todas las dependencias necesarias del proyecto, sigue estos pasos:
