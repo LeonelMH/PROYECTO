@@ -1,9 +1,7 @@
 # Lenguajes y Autómatas II — Proyecto de análisis multimodal
 
-## 🔧 Instalación
-
 # Instalación de Dependencias
-
+## 🔧 Instalación
 Para instalar todas las dependencias necesarias del proyecto, sigue estos pasos:
 
 1. Asegúrate de tener Python instalado en tu sistema
