@@ -1,5 +1,7 @@
-# Instalación de Dependencias
+# Lenguajes y Autómatas II — Proyecto de análisis multimodal
 
+# Instalación de Dependencias
+## 🔧 Instalación
 Para instalar todas las dependencias necesarias del proyecto, sigue estos pasos:
 
 1. Asegúrate de tener Python instalado en tu sistema
@@ -19,3 +21,5 @@ python -m venv venv
 source venv/bin/activate  # En Linux/Mac
 venv\Scripts\activate     # En Windows
 ```
+## 🚀 Ejecución
+python app.py
