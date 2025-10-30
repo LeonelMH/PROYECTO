@@ -2,7 +2,7 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8">
-  <title>Semántico + Cámara + Léxico</title>
+  <title>Panchito 360p</title>
   <style>
     body {
       font-family: Arial, sans-serif;
@@ -45,6 +45,7 @@
       flex-direction: row;
       gap: 10px;
       width: 400px;
+      color: #000000;
     }
     .panel-bloque {
       display: flex;
@@ -76,7 +77,7 @@
       margin: 0 0 4px 0;
       font-size: 1rem;
       font-weight: bold;
-      color: #333;
+      color: #ffffff;
       text-align: center;
       
     }
@@ -91,7 +92,7 @@
       border-left: 4px solid green;
       padding-left: 8px;
     }
-    .grafica-container {
+    /* .grafica-container {
       display: flex;
       justify-content: center;
       margin-top: 1rem;
@@ -107,11 +108,67 @@
       max-width: 600px;
       background-color: white;
       box-shadow: 0 0 5px rgba(0,0,0,0.1);
-    }
+    } */
     #earRegistro {
   font-family: monospace;
   font-size: 0.9rem;
     }
+    body {
+  background-color: #0c1a2b; /* azul marino profundo */
+  font-family: 'Segoe UI', Tahoma, sans-serif;
+  color: #ffffff; /* gris claro */
+  padding: 20px;
+}
+.frases-horizontal {
+  display: flex;
+  justify-content: space-between;
+  gap: 40px;
+  margin-top: 30px;
+}
+
+.bloque-frases {
+  flex: 1;
+  background-color: #ffffff;
+  color: #000000;
+  padding: 15px;
+  border-radius: 8px;
+  box-shadow: 0 0 5px rgba(0,0,0,0.2);
+}
+
+.titulo-rojo {
+  color: red;
+  margin-bottom: 10px;
+}
+
+ul {
+  list-style-type: disc;
+  padding-left: 20px;
+  margin-bottom: 10px;
+}
+
+input {
+  width: 80%;
+  padding: 6px;
+  margin-top: 5px;
+}
+
+button {
+  padding: 6px 10px;
+  margin-left: 5px;
+  cursor: pointer;
+}
+#listaCansancio, #listaRecuperacion {
+  max-height: 250px; /* ajusta según tu diseño */
+  overflow-y: auto;
+  background-color: #f9f9f9;
+  color: #000000;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  margin-bottom: 10px;
+}
+
+
   </style>
 </head>
 <body>
@@ -126,7 +183,9 @@
 </script>
   </div>
 
-  <audio id="alertaSonido" src="/static/Estoy cansado jefe.mp3" preload="auto"></audio>
+  <!-- <audio id="alertaSonido" src="/static/Estoy cansado jefe.mp3" preload="auto"></audio> -->
+  <audio id="alertaSonido" src="/static/alertav1.mp3" preload="auto"></audio>
+  <audio id="alertaRecuperacionVoz" src="/static/recuperacion.mp3" preload="auto"></audio>
 
 <div class="fila-principal">
   <!-- Cámara a la izquierda -->
@@ -160,12 +219,24 @@
   </div>
 </div>
 
+
+<div class="frases-horizontal">
+  <div class="bloque-frases">
+    <h3 class="titulo-rojo">Frases Cansancio</h3>
+    <ul id="listaCansancio"></ul>
+  </div>
+
+  <div class="bloque-frases">
+    <h3 class="titulo-rojo">Frases Recuperación</h3>
+    <ul id="listaRecuperacion"></ul>
+  </div>
+</div>
   
 
 
-<h3 style="text-align:center;">Gráfica de Intenciones</h3>
+<!-- <h3 style="text-align:center;">Gráfica de Intenciones</h3>
 <div class="grafica-container"></div>
-<canvas id="grafica" width="600" height="300"></canvas>
+<canvas id="grafica" width="600" height="300"></canvas> -->
 </div>
 
 
@@ -176,6 +247,54 @@
   <script src="https://cdn.jsdelivr.net/npm/@mediapipe/face_mesh/face_mesh_connections.js"></script>
 
   <script>
+
+
+let frases_cansancio = ["estoy cansado", "necesito descansar", "no puedo más", "no puedo mas",
+  "me siento fatigado", "estoy agotado", "me siento exhausto", "ya no rindo",
+  "me cuesta concentrarme", "tengo sueño", "me siento débil", "me siento debil",
+  "estoy adormilado", "no tengo energía", "no tengo energia", "me siento lento",
+  "estoy abrumado", "me siento saturado", "necesito una pausa", "estoy quemado",
+  "me siento sin fuerzas", "no estoy al cien", "no estoy al 100", "me siento distraído"];
+
+let frases_recuperacion = ["ya estoy bien", "me siento mejor", "ya descansé", "ya descanse",
+  "estoy despierto", "me siento renovado", "estoy listo", "me siento con energía",
+  "ya me recuperé", "ya me recupere", "me siento enfocado", "estoy al cien",
+  "ya estoy al 100", "ya estoy activo", "me siento despejado", "estoy alerta",
+  "ya estoy concentrado", "me siento motivado", "ya estoy de vuelta", "me siento presente",
+  "estoy en forma", "ya pasó el cansancio", "me siento estable"];
+
+function mostrarFrases() {
+  const listaC = document.getElementById("listaCansancio");
+  const listaR = document.getElementById("listaRecuperacion");
+  listaC.innerHTML = '';
+  listaR.innerHTML = '';
+
+  frases_cansancio.forEach((frase, index) => {
+    const li = document.createElement("li");
+    li.innerHTML = `<strong>${index + 1}.</strong> ${frase}`;
+    listaC.appendChild(li);
+  });
+
+  frases_recuperacion.forEach((frase, index) => {
+    const li = document.createElement("li");
+    li.innerHTML = `<strong>${index + 1}.</strong> ${frase}`;
+    listaR.appendChild(li);
+  });
+}
+
+mostrarFrases();
+
+
+
+
+
+
+
+
+
+
+
+
     let capturaActiva = false;
     let scrollManual = { voz: false, log: false, earRegistro: false };
 
@@ -190,6 +309,9 @@
 
     function limpiar() {
       fetch('/limpiar', { method: 'POST' });
+      document.getElementById('voz').innerHTML = '';
+      document.getElementById('log').innerHTML = '';
+      document.getElementById('earRegistro').innerHTML = ''; 
     }
 
     function detectScroll(id) {
@@ -246,6 +368,7 @@ const canvasElement = document.getElementById('canvas');
 const canvasCtx = canvasElement.getContext('2d');
 const earRegistro = document.getElementById('earRegistro');
 const alertaSonido = document.getElementById('alertaSonido');
+const alertaRecuperacionVoz = document.getElementById('alertaRecuperacionVoz');
 
 
 let mensajeCanvas = null;
@@ -363,6 +486,7 @@ if (fatigueRatio >= FATIGUE_PERCENTAGE_THRESHOLD && !alert_active) {
   canvasCtx.font = "bold 18px Arial";
   mensajeCanvas = "🔴 FATIGA VISUAL DETECTADA"
   mensajeExpira = timestamp + 3000;
+  earRegistro.innerHTML += `<div class="resaltado-rojo">${hora} → 👁 FATIGA VISUAL DETECTADA (EAR=${avgEAR.toFixed(3)})</div>`;
   canvasCtx.restore();
 
   alertaSonido.loop = true;
@@ -376,7 +500,7 @@ if (alert_active) {
   const recoveryWindow = earRecords.filter(([t]) => timestamp - t <= RECOVERY_DELAY_MS);
   const highCount = recoveryWindow.filter(([_, e]) => e >= RECOVERY_THRESHOLD).length;
   const recoveryRatio = recoveryWindow.length ? highCount / recoveryWindow.length : 0;
-
+  
   if (recoveryRatio >= 0.5) {
     canvasCtx.save();
     canvasCtx.fillStyle = "green";
@@ -384,6 +508,7 @@ if (alert_active) {
     canvasCtx.fillText("🟢 RECUPERACIÓN DETECTADA", 10, 30);
     mensajeCanvas = "🟢 RECUPERACIÓN VISUAL DETECTADA"
     mensajeExpira = timestamp + 3000; 
+    earRegistro.innerHTML += `<div class="resaltado-verde">${hora} → 👁 RECUPERACIÓN VISUAL DETECTADA (EAR=${avgEAR.toFixed(3)})</div>`;
     canvasCtx.restore();
 
     alertaSonido.loop = false;
@@ -391,6 +516,11 @@ if (alert_active) {
     alertaSonido.currentTime = 0;
     alert_active = false;
     fatigue_detected_at = null;
+
+    alertaRecuperacionVoz.pause();
+    alertaRecuperacionVoz.currentTime = 0;
+    alertaRecuperacionVoz.play();
+
   }
 }
   }
@@ -421,50 +551,50 @@ function activarCamara() {
 }
 
 
-      const ctx = document.getElementById('grafica').getContext('2d');
-      const grafica = new Chart(ctx, {
-        type: 'bar',
-        data: {
-          labels: ['Fatiga Verbal', 'Fatiga Ocular', 'Positiva', 'Contradicción', 'Solicitud', 'Recuperación'],
-          datasets: [{
-            label: 'Intenciones Detectadas',
-            data: [0, 0, 0, 0, 0, 0],
-            backgroundColor: [
-              '#ff6666', '#cc99ff', '#66cc66', '#ffcc66', '#ff9966', '#66ffff'
-            ]
-          }]
-        },
-        options: {
-  responsive: true,
-  maintainAspectRatio: true,
-  scales: {
-    x: { grid: { display: false } },
-    y: {
-      beginAtZero: true,
-      grid: { display: false },
-      ticks: {
-        color: '#333',
-        font: { size: 12 }
-      }
-    }
-  },
-  plugins: {
-    legend: { display: false }
-  }
-}
-      });
+//       const ctx = document.getElementById('grafica').getContext('2d');
+//       const grafica = new Chart(ctx, {
+//         type: 'bar',
+//         data: {
+//           labels: ['Fatiga Verbal', 'Fatiga Ocular', 'Positiva', 'Contradicción', 'Solicitud', 'Recuperación'],
+//           datasets: [{
+//             label: 'Intenciones Detectadas',
+//             data: [0, 0, 0, 0, 0, 0],
+//             backgroundColor: [
+//               '#ff6666', '#cc99ff', '#66cc66', '#ffcc66', '#ff9966', '#66ffff'
+//             ]
+//           }]
+//         },
+//         options: {
+//   responsive: true,
+//   maintainAspectRatio: true,
+//   scales: {
+//     x: { grid: { display: false } },
+//     y: {
+//       beginAtZero: true,
+//       grid: { display: false },
+//       ticks: {
+//         color: '#333',
+//         font: { size: 12 }
+//       }
+//     }
+//   },
+//   plugins: {
+//     legend: { display: false }
+//   }
+// }
+//       });
 
-      function actualizarGrafica(contador) {
-        grafica.data.datasets[0].data = [
-          contador.fatiga_verbal || 0,
-          contador.fatiga_ocular || 0,
-          contador.positiva || 0,
-          contador.contradiccion || 0,
-          contador.solicitud || 0,
-          contador.recuperacion || 0
-        ];
-        grafica.update();
-      }
+//       function actualizarGrafica(contador) {
+//         grafica.data.datasets[0].data = [
+//           contador.fatiga_verbal || 0,
+//           contador.fatiga_ocular || 0,
+//           contador.positiva || 0,
+//           contador.contradiccion || 0,
+//           contador.solicitud || 0,
+//           contador.recuperacion || 0
+//         ];
+//         grafica.update();
+//       }
 
       setInterval(() => {
         fetch('/frases_semantico')
@@ -484,6 +614,8 @@ function activarCamara() {
       });
       }, 1000);
     
+
+      
   </script>
 </body>
 </html>

@@ -60,3 +60,55 @@ button {
   border-left: 4px solid purple;
   padding-left: 8px;
 }
+.alerta-fatiga {
+  color: #ff4c4c; /* rojo intenso para el texto */
+  font-weight: bold;
+  background-color: rgba(255, 76, 76, 0.1); /* fondo rojo suave */
+  border-left: 3px solid #ff4c4c; /* borde rojo a la izquierda */
+  padding: 6px 10px;
+  border-radius: 4px;
+  margin-bottom: 8px;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.4); /* sombra para contraste */
+}
+nav a:hover {
+  color: #00bcd4;
+  text-decoration: underline;
+}
+.frases-horizontal {
+  display: flex;
+  justify-content: space-between;
+  gap: 40px;
+  margin-top: 30px;
+}
+
+.bloque-frases {
+  flex: 1;
+  background-color: #ffffff;
+  color: #000000;
+  padding: 15px;
+  border-radius: 8px;
+  box-shadow: 0 0 5px rgba(0,0,0,0.2);
+}
+
+.titulo-rojo {
+  color: red;
+  margin-bottom: 10px;
+}
+
+ul {
+  list-style-type: disc;
+  padding-left: 20px;
+  margin-bottom: 10px;
+}
+
+input {
+  width: 80%;
+  padding: 6px;
+  margin-top: 5px;
+}
+
+button {
+  padding: 6px 10px;
+  margin-left: 5px;
+  cursor: pointer;
+}
